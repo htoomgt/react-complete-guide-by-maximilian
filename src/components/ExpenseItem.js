@@ -1,9 +1,15 @@
-import React from 'react'
+import React from 'react';
+import './ExpenseItem.css';
 
-export default function ExpenseItem() {
+export default function ExpenseItem(props) {
+   
     return (
-        <div>
-            <h2> Expense Item !</h2>
+        <div className="expense-item">
+            <div> {props.date.toISOString()}</div>
+            <div className="expense-item__description">
+                <h2> {props.title}</h2>
+                <div class="expense-item__price"> $ {props.amount}</div>
+            </div>
         </div>
     )
 }
