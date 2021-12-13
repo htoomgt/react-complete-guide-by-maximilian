@@ -12,7 +12,7 @@ const  Expenses = (props) =>{
                     <ExpenseItem
                         key={expense.id}
                         title={expense.title}
-                        amount={expense.amount}
+                        amount={parseFloat(expense.amount)}
                         date={expense.date}
                     />
                     
