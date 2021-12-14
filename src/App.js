@@ -31,10 +31,11 @@ const App = () => {
   const [expenses, setExpenses] = useState(expensesDummyData);
 
   const onAddExpenseHandler = (enteredExpenseData) => {
-       expenses.push(enteredExpenseData); 
+      //  expenses.push(enteredExpenseData); // it is working version too
+       
        setExpenses((prevExpenses) => {
          return [...prevExpenses, enteredExpenseData];
-       });
+       }); /* It is working versio too */
 
        console.log(expenses);
   }
