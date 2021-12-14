@@ -1,40 +1,30 @@
-import React, { useState } from 'react';
-import './ExpenseItem.css';
-import ExpenseDate from './ExpenseDate';
-import PropTypes from 'prop-types';
-import Card from '../UI/Card';
+import React, { useState } from "react";
+import "./ExpenseItem.css";
+import ExpenseDate from "./ExpenseDate";
+import PropTypes from "prop-types";
+import Card from "../UI/Card";
 
-const ExpenseItem = (props) => {
+const ExpenseItem = (props) => {  
 
-    const [title, setTitle] = useState(props.title);
-
-
-    const clickHandler = () =>{
-        setTitle('Updated!');
-        console.log('change title');
-    }
     
-   
-    return (
-        <Card className="expense-item">
-            <ExpenseDate 
-                date={props.date}
-            />
-            <div className="expense-item__description">
-                <h2> {title}</h2>
-                <div className="expense-item__price"> $ {props.amount}</div>
-            </div>
-            <button onClick={clickHandler}>Change Title</button>
-        </Card>
-    )
-}
 
-export default  ExpenseItem;
+    return (
+        <li>
+            <Card className="expense-item">
+                <ExpenseDate date={props.date} />
+                <div className="expense-item__description">
+                    <h2> {props.title}</h2>
+                    <div className="expense-item__price"> $ {props.amount}</div>
+                </div>                
+            </Card>
+        </li>
+    );
+};
+
+export default ExpenseItem;
 
 ExpenseItem.propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
     title: PropTypes.string.isRequired,
     amount: PropTypes.number.isRequired,
-}
-
-
+};
