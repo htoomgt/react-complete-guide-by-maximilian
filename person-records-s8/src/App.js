@@ -1,23 +1,46 @@
-import logo from './logo.svg';
 import './App.css';
+import env from "react-dotenv";
+import AddUser from './components/Users/AddUser';
+import UserList from './components/Users/UserList';
+import React, { useState } from 'react';
 
 function App() {
+
+  let users_dummy_data = [
+    {
+      id : "p-001",
+      username : "John Doe",
+      age : 31
+    },
+    {
+      id : "p-002",
+      username : "Aung Soe",
+      age : 23
+    },
+    {
+      id : "p-003",
+      username : "Hla Hla",
+      age : 42
+    },
+  ];
+
+  const [userData, setUserData] = useState(users_dummy_data);
+
+  const addUserHandler = (user) => {
+    setUserData((prevState) => {
+      return [...prevState, user];
+    });
+    
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="appContainer">
+      
+      <AddUser onSaveUser={addUserHandler}/>
+
+      <UserList users={userData}/>
+      
     </div>
   );
 }

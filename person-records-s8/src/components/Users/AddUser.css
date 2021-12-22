@@ -1,0 +1,29 @@
+.frm_user_input{
+    display:block;
+}
+
+.user_input_control label{
+    display:block;
+    font-weight: 650;
+    margin-bottom: 8px;    
+}
+
+.user_input_control input{
+    display:block;
+    width:100%;
+    height:40px;
+    padding:5px 5px 5px 12px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    margin-bottom:24px;
+}
+
+.user_input_control.invalid label{
+    color:red;
+}
+
+.user_input_control.invalid input{
+    border:1px solid red;
+    background-color: salmon;
+}
+

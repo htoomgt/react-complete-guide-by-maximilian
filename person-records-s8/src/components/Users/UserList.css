@@ -1,0 +1,35 @@
+.user_data_grid{
+    width:100%;
+    border-collapse: collapse;    
+}
+.user_data_grid th,
+.user_data_grid td{
+    padding:8px;
+}
+.user_data_grid thead tr{
+    background-color: #9519b7;
+}
+
+.user_data_grid tbody{
+    color: black;
+}
+.user_data_grid tbody tr{
+    background-color:#e5bff2;
+}
+
+.user_data_grid tbody tr:nth-child(even){
+    background-color:#b63fdb;
+}
+
+.user_data_grid th:first-child{
+    width:10%;
+}
+
+.user_data_grid th:nth-child(2){
+    width:60%;
+}
+
+.user_data_grid td{
+    text-align: center;
+    font-weight: 550;
+}
