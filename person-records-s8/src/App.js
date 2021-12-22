@@ -6,23 +6,7 @@ import React, { useState } from 'react';
 
 function App() {
 
-  let users_init_data = [
-    {
-      id : "p-001",
-      username : "John Doe",
-      age : 31
-    },
-    {
-      id : "p-002",
-      username : "Aung Soe",
-      age : 23
-    },
-    {
-      id : "p-003",
-      username : "Hla Hla",
-      age : 42
-    },
-  ];
+  let users_init_data = [];
 
   const [userData, setUserData] = useState(users_init_data);
 

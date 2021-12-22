@@ -5,6 +5,7 @@ import Button from "../UI/Button";
 import Card from "../UI/Card";
 import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
+import ErrorModal from '../UI/ErrorModal';
 
 const AddUser = (props) => {
     const [username, setUsername] = useState("");
@@ -13,6 +14,9 @@ const AddUser = (props) => {
     const [ageValid, setAgeValid] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [newForm, setNewForm] = useState(true);
+    const [displayModal, setDisplayModal] = useState(false);
+    const [errorModalTitle, setErrorModalTitle] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const usernameChangeHandler = (event) => {
         let usernameVal = event.target.value;
@@ -65,19 +69,26 @@ const AddUser = (props) => {
 
             resetForm();
 
-            Swal.fire({
+           /*  Swal.fire({
                 title: "User Added!",
                 text: "User has been added successfully!",
                 icon: "success",
                 confirmButtonText: "OK",
-            });
+            }); */
+            setErrorModalTitle("Success");
+            setErrorMessage("User has been added successfully!");
+            setDisplayModal(true);
         } else {
-            Swal.fire({
+           /*  Swal.fire({
                 title: "Form is not valid!",
                 text: "Please check your input!",
                 icon: "error",
                 confirmButtonText: "OK",
-            });
+            }); */
+
+            setErrorModalTitle("Error");
+            setErrorMessage("Please check your input!");
+            setDisplayModal(true);
         }
     };
 
@@ -90,8 +101,20 @@ const AddUser = (props) => {
         setIsFormValid(false);
     };
 
+    const changeModalDisplayStatus = () => {
+        setDisplayModal(false);        
+    }
+
     return (
-        <Card className={`${styleClasses.user_input_control}`}>
+        <div>
+            <ErrorModal 
+                title={errorModalTitle} 
+                message={errorMessage}
+                isVisible={displayModal}
+                changeModalDisplayStatus={changeModalDisplayStatus}
+            />
+
+            <Card className={`${styleClasses.user_input_control}`}>
             <form onSubmit={addUserHandler}>
                 <div
                     className={`                            
@@ -134,6 +157,8 @@ const AddUser = (props) => {
                 <Button buttonType="submit"  >Add User</Button>
             </form>
         </Card>
+        </div>
+        
     );
 };
 
