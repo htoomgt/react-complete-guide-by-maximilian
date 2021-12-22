@@ -1,15 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Button.css';
+import styleClasses from './Button.module.css';
 
 const Button = props => {
     return (
-        <button type="submit" className="submit_button" >{props.buttonText}</button>
+        <button 
+            type={props.buttonType} 
+            className={`${styleClasses.submit_button}`} 
+            onClick={props.clickHandler}
+        >{props.children}</button>
     )
 }
 
 Button.propTypes = {
-    buttonText: PropTypes.string.isRequired
+    buttonType: PropTypes.string.isRequired,    
+    clickHandler: PropTypes.func
+    
 }
 
 export default Button

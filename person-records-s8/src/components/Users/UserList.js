@@ -1,19 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Card from "../UI/Card";
-import "./UserList.css";
+import styleClasses from "./UserList.module.css";
 
 const UserList = (props) => {
     return (
-        <Card>
-            {/*  {
-                props.users.map((user) => {
-                    console.log(user);
-                })
-                
-            } */}
+        <Card className={`${styleClasses.user_data_grid}`}>            
 
-            <table className="user_data_grid">
+            <table >
                 <thead>
                     <tr>
                         <th>#</th>
@@ -37,6 +31,8 @@ const UserList = (props) => {
     );
 };
 
-UserList.propTypes = {};
+UserList.propTypes = {
+    users: PropTypes.array.isRequired
+};
 
 export default UserList;

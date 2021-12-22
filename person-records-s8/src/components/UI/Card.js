@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './Card.css';
+import styleClass from './Card.module.css';
 
 const Card = props => {
-    const className = 'card ' + (props.className || '');
+    
     return (
-        <div className={className}>
+        <div className={`${styleClass.card} ${props.className}`}>
              {props.children} 
         </div>
     )
 }
 
 Card.propTypes = {
-
+    className: PropTypes.string
 }
 
 export default Card

@@ -1,4 +1,4 @@
-.frm_user_input{
+.user_input_control form{
     display:block;
 }
 
@@ -18,11 +18,11 @@
     margin-bottom:24px;
 }
 
-.user_input_control.invalid label{
+.invalid label{
     color:red;
 }
 
-.user_input_control.invalid input{
+.invalid input{
     border:1px solid red;
     background-color: salmon;
 }

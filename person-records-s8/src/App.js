@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 function App() {
 
-  let users_dummy_data = [
+  let users_init_data = [
     {
       id : "p-001",
       username : "John Doe",
@@ -24,7 +24,7 @@ function App() {
     },
   ];
 
-  const [userData, setUserData] = useState(users_dummy_data);
+  const [userData, setUserData] = useState(users_init_data);
 
   const addUserHandler = (user) => {
     setUserData((prevState) => {
