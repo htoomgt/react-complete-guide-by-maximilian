@@ -5,7 +5,7 @@ import styleClass from './Card.module.css';
 const Card = props => {
     
     return (
-        <div className={`${styleClass.card} ${props.className}`}>
+        <div className={`${styleClass.card} ${props.className}`} onClick={props.onClick}>
              {props.children} 
         </div>
     )

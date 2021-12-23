@@ -2,7 +2,7 @@ import './App.css';
 import env from "react-dotenv";
 import AddUser from './components/Users/AddUser';
 import UserList from './components/Users/UserList';
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 
 function App() {
 
@@ -19,13 +19,15 @@ function App() {
 
 
   return (
-    <div className="appContainer">
-      
-      <AddUser onSaveUser={addUserHandler}/>
+    <Fragment>
+      <div className="appContainer">
+        
+        <AddUser onSaveUser={addUserHandler}/>
 
-      <UserList users={userData}/>
-      
-    </div>
+        <UserList users={userData}/>
+        
+      </div>
+    </Fragment>
   );
 }
 

@@ -6,6 +6,7 @@ import Card from "../UI/Card";
 import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
 import ErrorModal from '../UI/ErrorModal';
+import Wrapper from '../Helpers/Wrapper';
 
 const AddUser = (props) => {
     const [username, setUsername] = useState("");
@@ -106,7 +107,7 @@ const AddUser = (props) => {
     }
 
     return (
-        <div>
+        <>
             <ErrorModal 
                 title={errorModalTitle} 
                 message={errorMessage}
@@ -157,7 +158,7 @@ const AddUser = (props) => {
                 <Button buttonType="submit"  >Add User</Button>
             </form>
         </Card>
-        </div>
+       </>
         
     );
 };

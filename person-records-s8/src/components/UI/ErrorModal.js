@@ -1,11 +1,12 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Card from "./Card";
 import Button from "./Button";
 import StyleClasses from "./ErrorModal.module.css";
 
-const ErrorModal = (props) => {
-    
+
+const Modal = (props) => {    
 
     return (
         <Card
@@ -18,7 +19,7 @@ const ErrorModal = (props) => {
             }
         `}
         >
-            
+        
             <div className={`${StyleClasses.modal_content}`}>
             
                     <h2>{props.title}</h2>
@@ -37,8 +38,24 @@ const ErrorModal = (props) => {
                 </p>
             </div>
         </Card>
+        
     );
 };
+
+const ErrorModal = (props) => {
+    return(
+        <React.Fragment>
+            {ReactDOM.createPortal(<Modal
+                title={props.title}
+                message={props.message}
+                isVisible={props.isVisible}
+                changeModalDisplayStatus={props.changeModalDisplayStatus}    
+            />, document.getElementById("error-modal-root") 
+            )}
+            
+        </React.Fragment>
+    );
+}
 
 ErrorModal.propTypes = {};
 
