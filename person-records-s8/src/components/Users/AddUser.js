@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import styleClasses from "./AddUser.module.css";
 import Button from "../UI/Button";
@@ -9,6 +9,9 @@ import ErrorModal from '../UI/ErrorModal';
 import Wrapper from '../Helpers/Wrapper';
 
 const AddUser = (props) => {
+    const usernameInputRef = useRef();
+    const ageInputRef = useRef();
+
     const [username, setUsername] = useState("");
     const [usernameValid, setusernameValid] = useState(false);
     const [age, setAge] = useState("");
@@ -55,6 +58,10 @@ const AddUser = (props) => {
 
     const addUserHandler = (event) => {
         event.preventDefault();
+        
+        const enteredName = usernameInputRef.current.value;
+        const enteredAge = ageInputRef.current.value;
+
         setNewForm(false);
 
         formValidityCheck();
@@ -62,8 +69,8 @@ const AddUser = (props) => {
         if (isFormValid) {
             const addingUser = {
                 id: uuidv4(),
-                username: username,
-                age: age,
+                username: enteredName,
+                age: enteredAge,
             };
 
             props.onSaveUser(addingUser);
@@ -95,7 +102,7 @@ const AddUser = (props) => {
 
     const resetForm = () => {
         setUsername("");
-        setAge("");
+        setAge("");        
         setusernameValid(false);
         setAgeValid(false);
         setNewForm(true);
@@ -135,6 +142,7 @@ const AddUser = (props) => {
                         name="username"
                         onChange={usernameChangeHandler}
                         value={username}
+                        ref={usernameInputRef}
                     />
                 </div>
 
@@ -152,6 +160,7 @@ const AddUser = (props) => {
                         value={age}
                         min="1"
                         max="120"
+                        ref={ageInputRef}
                     />
                 </div>
 
