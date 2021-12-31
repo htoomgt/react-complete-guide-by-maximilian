@@ -7,11 +7,20 @@
     background-color: #8a2b06;
     color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content:center;
     align-items: center;
-    padding: 0 10%;
+    /* padding:0 10%; */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     z-index: 10;
+    
+  }
+
+  .headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    /* border: 5px solid green; */
   }
   
   .main-image {
