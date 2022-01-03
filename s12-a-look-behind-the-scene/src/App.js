@@ -25,7 +25,7 @@ function App() {
             <h1>Hi there!</h1>
             <DemoOutput show={showParagraph} />
             <Button onClick={allowToggleHandler}> Allow Toggling</Button>
-            <Button onClick={toggleParagraph}> Toggle Paragraph</Button>
+            <Button onClick={toggleParagraph} className="mt-8"> Toggle Paragraph</Button>
         </div>
     );
 }
