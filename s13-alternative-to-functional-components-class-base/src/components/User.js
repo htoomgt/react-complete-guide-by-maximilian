@@ -12,7 +12,9 @@ export default User; */
 
 
 class User extends Component {
-  
+  componentWillMount() {
+    console.log('User will unmount!')
+  }
 
   render() {
     return (
