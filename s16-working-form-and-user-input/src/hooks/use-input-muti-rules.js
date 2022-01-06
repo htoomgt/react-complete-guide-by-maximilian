@@ -62,7 +62,7 @@ const useInputMultiRules = (validationRules) => {
         rulesStatus : ruleStatuses, 
         hasError : hasError,
         isValid : valueIsValid,
-        setIsTouched,
+        setIsTouched: setIsTouched,
         valueChangeHandler,
         inputBlurHandler,
         reset
