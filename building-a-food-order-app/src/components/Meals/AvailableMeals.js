@@ -1,38 +1,41 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import classess from "./AvailableMeals.module.css";
 import Card from "../UI/Card/Card";
 import MealItem from "./MealItem/MealItem";
 
-const DUMMY_MEALS = [
-    {
-        id: "m1",
-        name: "Sushi",
-        description: "Finest fish and veggies",
-        price: 22.99,
-    },
-    {
-        id: "m2",
-        name: "Schnitzel",
-        description: "A german specialty!",
-        price: 16.5,
-    },
-    {
-        id: "m3",
-        name: "Barbecue Burger",
-        description: "American, raw, meaty",
-        price: 12.99,
-    },
-    {
-        id: "m4",
-        name: "Green Bowl",
-        description: "Healthy...and green...",
-        price: 18.99,
-    },
-];
+
 
 const AvailableMeals = (props) => {
-    const mealsList = DUMMY_MEALS.map((meal) => {
+    const [meals, setMeals] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        let fetchMeals  = async () => {
+            let response = await fetch("https://react-http-tutorial-backend-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json");
+            let data = await response.json();
+            let loadedMeals = [];
+
+            for( let key in data){
+                loadedMeals.push({
+                    id : key,
+                    name : data[key].name,
+                    description : data[key].description,
+                    price : data[key].price,
+                })
+            }
+
+            setMeals(loadedMeals);
+            setIsLoading(false);
+        }
+
+        fetchMeals();
+
+
+    }, []);
+
+
+    const mealsList = meals.map((meal) => {
         return <MealItem 
             name={meal.name}
             description={meal.description}
@@ -41,6 +44,12 @@ const AvailableMeals = (props) => {
             id={meal.id}
         />;
     });
+
+    if(isLoading){
+        return <section className={`${classess.meals}`}>
+            <Card><p  className={classess.mealsIsLoading}>Loading...</p></Card>
+        </section>
+    }
 
     return (
         <section className={`${classess.meals}`}>
