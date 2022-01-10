@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import classes from "./Checkout.module.css";
 
 const isEmpty = value => value.trim() === '';
-const isFiveChars = value => value.length === 5;
+const isFiveChars = (value) => value.trim().length === 5;
+
 
 
 
@@ -26,15 +27,17 @@ const Checkout = (props) => {
     const confirmHandler = (event) => {
         event.preventDefault();
         const enteredName = nameInputRef.current.value;
-        const enteredStreetInput = nameInputRef.current.value;
-        const enteredPostalInput = nameInputRef.current.value;
-        const enteredCityInput = nameInputRef.current.value;
+        const enteredStreetInput = streetInputRef.current.value;
+        const enteredPostalInput = postalInputRef.current.value;
+        const enteredCityInput = cityInputRef.current.value;
 
 
         const enteredNameIsValid = !isEmpty(enteredName);
         const enteredStreetIsValid = !isEmpty(enteredStreetInput);
-        const enteredPostalIsValid = !isEmpty(enteredPostalInput);
-        const enteredCityIsValid = isFiveChars(enteredCityInput);
+        const enteredCityIsValid = !isEmpty(enteredCityInput);
+        const enteredPostalIsValid = isFiveChars(enteredPostalInput);
+       
+        
 
         setFormInputVality({
             name: enteredNameIsValid,
@@ -43,14 +46,35 @@ const Checkout = (props) => {
             postalCode : enteredPostalIsValid
         });
 
+        console.log(formInputVality);
+
 
         const formIsValid = enteredNameIsValid && enteredStreetIsValid && enteredPostalIsValid && enteredCityIsValid;
+        console.log(formIsValid);
 
-        if (formIsValid) {
+        if (!formIsValid) {
             // submtit cart form data
+            return;
+           
 
         }
-            
+        
+        props.onConfirm({
+            name : enteredName,
+            street : enteredStreetInput,
+            city : enteredCityInput,
+            postalCode: enteredPostalInput
+        });
+
+        nameInputRef.current.value = '';
+        streetInputRef.current.value = '';
+        postalInputRef.current.value = '';
+        cityInputRef.current.value = '';
+
+        
+        
+        
+
         
 
 
