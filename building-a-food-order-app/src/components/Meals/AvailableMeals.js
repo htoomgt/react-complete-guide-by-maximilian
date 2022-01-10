@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import classess from "./AvailableMeals.module.css";
+import classes from "./AvailableMeals.module.css";
 import Card from "../UI/Card/Card";
 import MealItem from "./MealItem/MealItem";
 
@@ -9,10 +9,17 @@ import MealItem from "./MealItem/MealItem";
 const AvailableMeals = (props) => {
     const [meals, setMeals] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [httpError, setHttpError] = useState(null);
 
     useEffect(() => {
         let fetchMeals  = async () => {
             let response = await fetch("https://react-http-tutorial-backend-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json");
+            
+            if(!response.ok) {
+                throw new Error('Oops! Something went wrong!');
+            }
+            
+
             let data = await response.json();
             let loadedMeals = [];
 
@@ -28,8 +35,13 @@ const AvailableMeals = (props) => {
             setMeals(loadedMeals);
             setIsLoading(false);
         }
-
-        fetchMeals();
+        
+        fetchMeals().catch((error) =>{
+            setIsLoading(false);
+            setHttpError(error.message);
+        });
+        
+        
 
 
     }, []);
@@ -46,13 +58,24 @@ const AvailableMeals = (props) => {
     });
 
     if(isLoading){
-        return <section className={`${classess.meals}`}>
-            <Card><p  className={classess.mealsIsLoading}>Loading...</p></Card>
+        return <section className={`${classes.meals}`}>
+            <Card><p  className={classes.mealsIsLoading}>Loading...</p></Card>
+        </section>
+    }
+
+    if(httpError){
+        
+        return <section className={`${classes.meals}`}>
+            <Card>
+                <p  className={classes.mealsError}>{httpError}</p>
+            </Card>
+            
+
         </section>
     }
 
     return (
-        <section className={`${classess.meals}`}>
+        <section className={`${classes.meals}`}>
             <Card>
                 <ul>{mealsList}</ul>
             </Card>

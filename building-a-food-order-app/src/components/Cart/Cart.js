@@ -1,13 +1,15 @@
-import React, {useEffect, useContext} from "react";
+import React, {useEffect, useContext, useState} from "react";
 import PropTypes from "prop-types";
 import classes from "./Cart.module.css";
 import Modal from "../UI/Modal/Modal";
 import CartContext from "../../store/cart-context";
 import CartItem from "./CartItem";
+import Checkout from "./Checkout";
 
 
 const Cart = (props) => {
     const cartCtx = useContext(CartContext);
+    const [isCheckout, setIsCheckout] = useState(false);
 
     const totalAmount = `${cartCtx.totalAmount.toFixed(2)}`;
     const hastItem = cartCtx.items.length > 0;
@@ -19,6 +21,10 @@ const Cart = (props) => {
     const cartItemAddHandler = (item) => {
         cartCtx.addItem({...item, amount : 1});
     };
+
+    const orderHandler = () => {
+        setIsCheckout(true);
+    }
 
 
 
@@ -39,6 +45,13 @@ const Cart = (props) => {
         </ul>
     );
 
+    const modalActions = (
+        <div className={classes.actions}>
+                <button className={classes["button-alt"]} onClick={props.onHideCart}>Close</button>
+                { hastItem && <button className={classes.button} onClick={orderHandler}>Order</button>}
+            </div>
+    );
+
     useEffect(() => {
         const handleEsc = (event) => {
             if (event.keyCode === 27) {
@@ -54,15 +67,15 @@ const Cart = (props) => {
 
     return (
         <Modal onClose={props.onHideCart}>
-            {cartItems}
-            <div className={classes.total}>
-                <span> Total Amount </span>
-                <span> {totalAmount}</span>
-            </div>
-            <div className={classes.actions}>
-                <button className={classes["button-alt"]} onClick={props.onHideCart}>Close</button>
-                { hastItem && <button className={classes.button}>Order</button>}
-            </div>
+            <section className={classes.containerSection}>
+                {cartItems}
+                <div className={classes.total}>
+                    <span> Total Amount </span>
+                    <span> {totalAmount}</span>
+                </div>
+                {isCheckout &&  <Checkout onCancel={props.onHideCart}/> }
+                {!isCheckout && modalActions}
+            </section>
         </Modal>
     );
 };
