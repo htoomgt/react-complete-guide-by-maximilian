@@ -8,8 +8,10 @@ const uiSlice = createSlice({
     name : 'ui',
     initialState : initialState,
     reducers : {
-        toggleCartVisibility: (state) => {  
+        toggleCartVisibility: (state) => { 
+            // console.log(state.cartIsVisible);
             state.cartIsVisible = !state.cartIsVisible;
+            // console.log(state.cartIsVisible);
         }
     }
 });
