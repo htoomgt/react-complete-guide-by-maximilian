@@ -1,49 +1,15 @@
 import Card from '../UI/Card';
 import classes from './ProductItem.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { cartActions } from '../../store/index';
 
 const ProductItem = (props) => {
-  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   const { title, price, description, id } = props;
 
   const addToCartHanlder = () => {  
-    const newTotalQuantity = cart.totalQuantity + 1;
-    const updatedItems = cart.items.slice(); // create copy via slice to avoid mutating original state
-    const existingItem = updatedItems.find((item) => item.id === id);
-
     
-
-    if(existingItem){
-      const updatedItem = {...existingItem};
-      updatedItem.quantity++;
-      updatedItem.totalPrice = updatedItem.totalPrice + price;
-      const existingItemIndex =  updatedItems.findIndex(
-        (item) => item.id === id
-      );
-
-      updatedItems[existingItemIndex] = updatedItem;
-
-    }
-    else{
-      updatedItems.push({
-        id: id,
-        price :  price,
-        quantity : 1,
-        totalPrice: price,
-        name: title
-      })
-    }
-
-    const newCart = {
-      totalQuantity :  newTotalQuantity,
-      items : updatedItems
-    }
-
-    dispatch(cartActions.replaceCart(newCart));
-
     // and then send  Http Request 
 
     // fetch('', {
@@ -53,11 +19,11 @@ const ProductItem = (props) => {
 
 
 
-    // dispatch(cartActions.addItem({
-    //   id,
-    //   title,
-    //   price,
-    // }));
+    dispatch(cartActions.addItem({
+      id,
+      title,
+      price,
+    }));
   }
 
   return (
