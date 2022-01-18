@@ -4,12 +4,12 @@ import { uiActions } from './index';
 
 const initialState = {
     items: [],
-    totalQuantity : 0,
-    totalAmount : 0,
+    totalQuantity : 0,    
+    change : false
 };
 
 const cartSlice = createSlice({
-    name: 'ui',
+    name: 'cart',
     initialState: initialState,
     reducers: {
         replaceCart: (state, action) => {
@@ -17,11 +17,13 @@ const cartSlice = createSlice({
            state.items = action.payload.items;        
         },
         addItem: (state, action) => {
+            state.changed = true;
             const newItem = action.payload;
             const existingItem = state.items.find((item) => item.id === newItem.id);
             state.totalQuantity++;
 
             if (!existingItem) {
+
               state.items.push({
                 id: newItem.id,
                 price: newItem.price,
@@ -36,6 +38,7 @@ const cartSlice = createSlice({
             
         },
         removeItem : (state, action) => {
+            state.changed = true;
             const id  = action.payload;
             const existingItem = state.items.find(item => item.id === id);
             state.totalQuantity--;    
@@ -44,6 +47,7 @@ const cartSlice = createSlice({
             }
             else{
                 existingItem.quantity--;
+                existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
             }
 
 
