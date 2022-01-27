@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import useHttp from '../hooks/use-http';
 import { addQuote } from '../lib/api';
 
-const NewQuotes = () => {
+const NewQuote = () => {
   const {sendRequest, status} = useHttp(addQuote);
   const history = useHistory();
 
@@ -28,4 +28,4 @@ const NewQuotes = () => {
   return <QuoteForm isLoading={ status === 'pending' } onAddQuote={addQuoteHandler} />;
 };
 
-export default NewQuotes;
+export default NewQuote;
