@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import {fireBaseAPIKey} from '../../config/envConfig';
 
 import classes from './AuthForm.module.css';
 
@@ -6,6 +7,8 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+
+  
 
 
   const switchAuthModeHandler = () => {
@@ -22,7 +25,7 @@ const AuthForm = () => {
 
     }
     else{
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA4ugFRWywh3CaomnXhxxyIe9YVuNPk5QM', {
+      fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${fireBaseAPIKey}`, {
         method : 'POST',
         body : JSON.stringify({
           email : enteredEmail,
