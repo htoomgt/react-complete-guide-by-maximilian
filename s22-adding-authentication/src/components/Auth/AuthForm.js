@@ -5,6 +5,7 @@ import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -19,6 +20,8 @@ const AuthForm = () => {
     e.preventDefault();
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
+
+    setIsLoading(true);
 
     // optional : Add validation
     if(isLogin){
@@ -36,13 +39,22 @@ const AuthForm = () => {
           'Content-Type' : 'applicaiton/json'
         }
       }).then(res => {
+        setIsLoading(false);
         if(res.ok){
           // ...
         }
         else{
           res.json().then((data) => {
             // show an error modal 
-            console.log(data);
+            let errorMessage = 'Authentication failed!';          
+            if(data && data.error.message){
+              errorMessage = data.error.message;
+            }
+
+            alert(errorMessage);
+
+
+
           });
         }
       })
@@ -54,6 +66,7 @@ const AuthForm = () => {
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
+
       <form onSubmit={submitHandler} >
         <div className={classes.control}>
           <label htmlFor='email'>Your Email</label>
@@ -64,13 +77,17 @@ const AuthForm = () => {
           <input type='password' id='password' required  ref={passwordInputRef}/>
         </div>
         <div className={classes.actions}>
-          <button>{isLogin ? 'Login' : 'Create Account'}</button>
+          <button>
+          {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
+          {isLoading && <p>Sending request...</p>}
+          </button>
           <button
             type='button'
             className={classes.toggle}
             onClick={switchAuthModeHandler}
           >
             {isLogin ? 'Create new account' : 'Login with existing account'}
+            
           </button>
         </div>
       </form>
