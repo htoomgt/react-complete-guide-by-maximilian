@@ -1,10 +1,12 @@
 import { useState, useRef, useContext } from 'react';
 import {fireBaseAPIKey} from '../../config/envConfig';
 import AuthContext from '../../store/auth-context';
+import { useHistory } from 'react-router-dom';
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
+  const history = useHistory();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const emailInputRef = useRef();
@@ -63,6 +65,7 @@ const AuthForm = () => {
       })
       .then((data) => {
         authCtx.login(data.idToken);
+        history.replace('/')
       })
       .catch((err) => {
         alert(err.message);

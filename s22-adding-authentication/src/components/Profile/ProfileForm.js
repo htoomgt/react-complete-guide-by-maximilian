@@ -2,10 +2,13 @@ import React, { useRef, useContext } from 'react';
 import classes from './ProfileForm.module.css';
 import {fireBaseAPIKey} from '../../config/envConfig';
 import AuthContext from '../../store/auth-context';
+import {useHistory} from 'react-router-dom';
 
 
 
 const ProfileForm = () => {
+  let history = useHistory();
+  
   const newPasswordInputRef = useRef();
   const authCtx = useContext(AuthContext)
 
@@ -27,6 +30,7 @@ const ProfileForm = () => {
       }
     }).then(res => {
       // assumption : Always succeds!
+      history.replace('/');
     });
 
   }
