@@ -1,8 +1,18 @@
 import Card from "../ui/Card";
 import classes from "./MeetupItem.module.css";
-import { Image } from "next/image";
+import  Image  from "next/image";
+
+import {useRouter } from 'next/router';
+
 
 const MeetupItem = (props) => {
+    const router = useRouter();
+
+
+    function showDetailHandler(){       
+        router.push('/'+ props.id);
+    }
+
     return (
         <li className={classes.item}>
             <Card>
@@ -14,7 +24,10 @@ const MeetupItem = (props) => {
                     <address>{props.address}</address>
                 </div>
                 <div className={classes.actions}>
-                    <button>Show Details</button>
+                    
+                        <button onClick={showDetailHandler}>Show Details</button>
+                    
+                    
                 </div>
             </Card>
         </li>
