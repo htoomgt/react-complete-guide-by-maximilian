@@ -1,20 +1,31 @@
 // api/new-meetup
+import {MongoClient} from 'mongodb';
 
-function handler(req, res) {
+async  function handler(req, res) {
     if(req.method === 'POST'){
         const data = req.body;
 
         const {title, description, address, image} = data;
-    }
+        const client = await  MongoClient.connect('mongodb://admin:localhost:27017/meetups?retryWrites=true&w=majority');
+        const db = client.db();
+        
+        const meetupsCollection = db.collection('meetups');
+        
+        const result = await meetupsCollection.insertOne(data);
 
+        console.log(result);
+
+
+        client.close();
+
+        res.status(201).json({ status : "ok", message: 'Meetup inserted!' });        
+
+        
+    }
+    
     
 
-    /* res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({
-        status: "ok",
-        message: "Meetup created successfully"
-    })); */
+    
 }
 
 export default handler;
