@@ -4,9 +4,10 @@ import {MongoClient} from 'mongodb';
 async  function handler(req, res) {
     if(req.method === 'POST'){
         const data = req.body;
+        console.log(data);
 
         const {title, description, address, image} = data;
-        const client = await  MongoClient.connect('mongodb://admin:localhost:27017/meetups?retryWrites=true&w=majority');
+        const client = await  MongoClient.connect('mongodb://localhost:27017/meetups?retryWrites=true&w=majority');
         const db = client.db();
         
         const meetupsCollection = db.collection('meetups');
@@ -16,9 +17,8 @@ async  function handler(req, res) {
         console.log(result);
 
 
-        client.close();
-
-        res.status(201).json({ status : "ok", message: 'Meetup inserted!' });        
+        client.close();  
+        res.status(201).json({ status : "ok", message: 'Meetup inserted!' }); 
 
         
     }
