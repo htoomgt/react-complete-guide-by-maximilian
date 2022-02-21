@@ -22,7 +22,7 @@ const NewMeetupPage = () => {
         router.push('/');
     }
 
-    return 
+    return (
     <Fragment>
         <Head>
             <title> Add New a meetup </title>
@@ -32,7 +32,7 @@ const NewMeetupPage = () => {
             />
         </Head>
         <NewMeetupForm onAddMeetup={addMeetupHandler} />;
-    </Fragment>
+    </Fragment>);
      
 };
 
