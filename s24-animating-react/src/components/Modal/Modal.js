@@ -13,7 +13,7 @@ const modal = (props) => {
 
   return (
     <>
-      <Transition mountOnEnter unmountOnExit in={props.show} timeout={300}>
+      <Transition mountOnEnter unmountOnExit in={props.show} timeout={animationTiming}>
         {(state) => {
             const  cssClasses = [
                 "Modal",
