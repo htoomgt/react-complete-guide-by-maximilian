@@ -1,6 +1,24 @@
 .item {
+    display:inline-flex;
+    justify-content:space-between;
+    width:100%;
     margin: 1rem 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     padding: 1rem;
     background-color: #f7f5ef;
+    /* border:1px solid red; */
+
   }
+.btn-remove{
+  border:1px solid #000;
+  border-radius: 5px;
+  padding: 5px 5px 8px 5px;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+}
+
+.btn-remove:hover{
+  background-color: #f9ccc7;
+  cursor: pointer;
+}
