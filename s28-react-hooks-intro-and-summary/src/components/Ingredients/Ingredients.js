@@ -3,11 +3,22 @@ import React, {useState, useEffect} from 'react';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
-import uuid from 'react-uuid';
 
 
 const Ingredients = (props) => {
   const [ingredients, setIngredients] = useState([]);
+
+  useEffect(()=>{
+    fetch('https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json')
+    .then(response => response.json())
+    .then(responseData => {
+      const loadingIngredients = [];
+      for(const key in responseData){
+        loadingIngredients.push({id : key, title : responseData[key].title, amount : responseData[key].amount})
+      }
+      setIngredients(loadingIngredients);
+    })
+  }, [])
 
   const addIngredientHandler = (ingredient) => {
     fetch('https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json', {
