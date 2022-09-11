@@ -10,12 +10,23 @@ const Ingredients = (props) => {
   const [ingredients, setIngredients] = useState([]);
 
   const addIngredientHandler = (ingredient) => {
-    setIngredients( (preIngredients) => [
-      ...preIngredients, 
-      {
-        id: uuid().toString(),
-        ...ingredient
-      }]);
+    fetch('https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json', {
+      method : 'POST',
+      body : JSON.stringify(ingredient),
+      headers : { 'Content-Type' : 'application/json' }
+    })
+    .then(response => {
+      // console.log(response);
+      return response.json();
+    })
+    .then(responseData => {
+      // console.log(responseData)
+      setIngredients( (preIngredients) => [
+        ...preIngredients, 
+        {id : responseData.name, ...ingredient}
+      ]);
+    })
+    
   }
 
   const onRemoveHandler = (id) => {
