@@ -13,7 +13,7 @@ const IngredientForm = React.memo((props) => {
         
     };
 
-    console.log("loading is " + props.loading);
+    console.log("RENDERING INGREDIENT FORM");
 
     return (
         <section className="ingredient-form">

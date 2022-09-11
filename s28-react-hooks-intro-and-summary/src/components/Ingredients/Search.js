@@ -4,12 +4,12 @@ import Card from "../UI/Card";
 import "./Search.css";
 
 const Search = React.memo((props) => {
-    const { onLoadingIngredients } = props;
+    const { onLoadingIngredients, httpDispatcher } = props;
     const [enteredFilter, setEnteredFilter] = useState("");
     const inputRef = useRef();
 
     useEffect(() => {
-        props.httpDispatcher({type : "SEND"});
+        httpDispatcher({type : "SEND"});
         let timeoutId = setTimeout(() => {
             if (enteredFilter === inputRef.current.value) {
                 const query =
@@ -35,16 +35,16 @@ const Search = React.memo((props) => {
                         onLoadingIngredients(loadingIngredients);
                     })
                     .catch((error) => {
-                      props.dispatchHttp({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
+                      httpDispatcher({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
                     })
-                    .finally(() => {props.httpDispatcher({type : "RESPONSE"});});
+                    .finally(() => {httpDispatcher({type : "RESPONSE"});});
             }
         }, 500);
 
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [enteredFilter, onLoadingIngredients, inputRef]);
+    }, [enteredFilter, onLoadingIngredients, inputRef, httpDispatcher]);
 
     return (
         <section className="search">

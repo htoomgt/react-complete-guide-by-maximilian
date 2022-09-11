@@ -1,4 +1,4 @@
-import React, {useReducer, useState, useEffect, useCallback} from 'react';
+import React, {useReducer, useEffect, useCallback} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -65,7 +65,7 @@ const Ingredients = (props) => {
     
   }
 
-  const onRemoveHandler = (id) => {
+  const onRemoveHandler = useCallback((id) => {
     dispatchHttp({type: "SEND"})
     fetch(`https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${id}/.json`, {
       method : 'DELETE',      
@@ -82,7 +82,7 @@ const Ingredients = (props) => {
 
     
     
-  }
+  },[]);
 
   useEffect(() => {
     console.log("RENDERING INGREDIENTS", userIngredients);
@@ -97,9 +97,9 @@ const Ingredients = (props) => {
   }, [])
   
   
-  let closeError = () => {
+  let closeError = useCallback(() => {
     dispatchHttp({type: "RESET"})
-  }
+  },[]);
 
 
   return (
@@ -108,7 +108,7 @@ const Ingredients = (props) => {
       <IngredientForm onSubmitForm={addIngredientHandler} loading={httpState.loading}/>
 
       <section>
-        <Search onLoadingIngredients={filterIngredientHandler} httpDispatcher={(args) => {dispatchHttp(args)}} />
+        <Search onLoadingIngredients={filterIngredientHandler} httpDispatcher={useCallback((args) => {dispatchHttp(args)},[])} />
         {/* Need to add list here! */}
         <IngredientList ingredients={userIngredients} onRemoveItem={onRemoveHandler} />
       </section>
