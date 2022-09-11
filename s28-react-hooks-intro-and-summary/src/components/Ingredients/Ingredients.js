@@ -1,13 +1,27 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useReducer, useState, useEffect, useCallback} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
 
+const ingredientReducer = (currentIngredients, action) => {
+  switch (action.type) {
+    case "SET":
+      return action.ingredients;
+    case "ADD":
+      return [...currentIngredients, action.ingredient]
+    case "DELETE":
+      return currentIngredients.filter(ing => ing.id !== action.id);
+    default:
+      throw new Error("Should not get there")
+  }
+}
+
 
 const Ingredients = (props) => {
-  const [ingredients, setIngredients] = useState([]);
+  const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
+  // const [ingredients, setIngredients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,11 +41,8 @@ const Ingredients = (props) => {
       return response.json();
     })
     .then(responseData => {
-      // console.log(responseData)
-      setIngredients( (preIngredients) => [
-        ...preIngredients, 
-        {id : responseData.name, ...ingredient}
-      ]);
+      
+      dispatch({type : "ADD", ingredient : { id: responseData.name, ...ingredient }})
     })
     
     
@@ -43,9 +54,10 @@ const Ingredients = (props) => {
       method : 'DELETE',      
     })
     .then((response) => {
-      setIngredients( (preIngredients) => {
-        return preIngredients.filter( item =>  item.id !== id)
-      });  
+      // setIngredients( (preIngredients) => {
+      //   return preIngredients.filter( item =>  item.id !== id)
+      // });  
+      dispatch({ type : "DELETE", id : id})
     })
     .catch((error) => {
       setError('Something went wrong! ' + error.message)
@@ -57,15 +69,16 @@ const Ingredients = (props) => {
   }
 
   useEffect(() => {
-    console.log("RENDERING INGREDIENTS", ingredients);
+    console.log("RENDERING INGREDIENTS", userIngredients);
   })
 
   useEffect(() => {
-    console.log(ingredients);
-  },[ingredients])
+    console.log(userIngredients);
+  },[userIngredients])
 
   const filterIngredientHandler = useCallback(filterIngredients => {
-    setIngredients(filterIngredients);
+    // setIngredients(filterIngredients);
+    dispatch({type : 'SET', ingredients : filterIngredients })
   }, [])
   
   
@@ -83,7 +96,7 @@ const Ingredients = (props) => {
       <section>
         <Search onLoadingIngredients={filterIngredientHandler} setIsLoading={setIsLoading}/>
         {/* Need to add list here! */}
-        <IngredientList ingredients={ingredients} onRemoveItem={onRemoveHandler} />
+        <IngredientList ingredients={userIngredients} onRemoveItem={onRemoveHandler} />
       </section>
     </div>
   );
