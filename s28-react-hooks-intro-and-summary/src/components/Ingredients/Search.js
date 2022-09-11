@@ -34,7 +34,7 @@ const Search = React.memo((props) => {
                         onLoadingIngredients(loadingIngredients);
                     });
             }
-        }, 400);
+        }, 500);
 
         return () => {
             clearTimeout(timeoutId);

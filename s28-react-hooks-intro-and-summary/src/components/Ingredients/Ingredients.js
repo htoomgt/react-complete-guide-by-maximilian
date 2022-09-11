@@ -31,6 +31,10 @@ const Ingredients = (props) => {
   }
 
   const onRemoveHandler = (id) => {
+    fetch(`https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${id}/.json`, {
+      method : 'DELETE',      
+    })
+
     setIngredients( (preIngredients) => {
       return preIngredients.filter( item =>  item.id !== id)
     });
