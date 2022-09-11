@@ -9,7 +9,7 @@ const Search = React.memo((props) => {
     const inputRef = useRef();
 
     useEffect(() => {
-        props.setIsLoading(true);
+        props.httpDispatcher({type : "SEND"});
         let timeoutId = setTimeout(() => {
             if (enteredFilter === inputRef.current.value) {
                 const query =
@@ -34,7 +34,10 @@ const Search = React.memo((props) => {
 
                         onLoadingIngredients(loadingIngredients);
                     })
-                    .finally(() => props.setIsLoading(false));
+                    .catch((error) => {
+                      props.dispatchHttp({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
+                    })
+                    .finally(() => {props.httpDispatcher({type : "RESPONSE"});});
             }
         }, 500);
 
