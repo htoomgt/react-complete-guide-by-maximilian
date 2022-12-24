@@ -6,6 +6,7 @@ import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
 import useHttp from '../../hooks/https';
 
+
 const ingredientReducer = (currentIngredients, action) => {
   switch (action.type) {
     case "SET":
@@ -19,35 +20,21 @@ const ingredientReducer = (currentIngredients, action) => {
   }
 }
 
-const httpReducer = (curHttpState, action) => {
-  switch (action.type) {
-    case 'SEND':
-      return { loading: true, error: null };
-    case 'RESPONSE':
-      return { ...curHttpState, loading: false };
-    case 'ERROR':
-      return { loading: false, error: action.errorMessage };
-    case 'CLEAR':
-      return { ...curHttpState, error: null };
-    default:
-      throw new Error('Should not be reached!');
-  }
-};
+
 
 
 
 
 const Ingredients = (props) => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const [httpState, dispatchHttp] = useReducer(httpReducer, {
-    loading : false,
-    error : null
-  })
+  
   const {
     isLoading,
     data,
     error,
-    sendRequest
+    sendRequest,
+    reqExtra,
+    reqIdentifier
   } = useHttp();
 
   
@@ -56,29 +43,14 @@ const Ingredients = (props) => {
   
 
   const addIngredientHandler = (ingredient) => {
-    // dispatchHttp({type: "SEND"})
-    // fetch('https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json', {
-    //   method : 'POST',
-    //   body : JSON.stringify(ingredient),
-    //   headers : { 'Content-Type' : 'application/json' }
-    // })
-    // .then(response => {
-      
-    //   dispatchHttp({type: "RESPONSE"})
-    //   return response.json();
-    // })
-    // .then(responseData => {
-      
-    //   dispatch({type : "ADD", ingredient : { id: responseData.name, ...ingredient }})
-    // })
-    // .catch((error) => {
-    //   dispatchHttp({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
-    // })
+    
 
     sendRequest(
       'https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json',
       'POST',
-      JSON.stringify(ingredient)
+      JSON.stringify(ingredient),
+      ingredient,
+      'ADD_INGREDIENT'
     )
     
     
@@ -90,7 +62,9 @@ const Ingredients = (props) => {
     sendRequest(
       `https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${id}/.json`,
       'DELETE',
-      {}
+      {},
+      id,
+      'REMOVE_INGREDIENT'
     )
 
     
@@ -98,8 +72,19 @@ const Ingredients = (props) => {
   },[sendRequest]);
 
   useEffect(() => {
-    console.log("RENDERING INGREDIENTS", userIngredients);
-  },[userIngredients]);
+    console.log(isLoading);
+    if(!isLoading && reqIdentifier === "REMOVE_INGREDIENT" ){
+      dispatch({ type : "DELETE", id : reqExtra});
+    }
+    else if(!isLoading && !error && reqIdentifier === 'ADD_INGREDIENT'){
+      dispatch({
+        type: 'ADD',
+        ingredient: { id: data.name, ...reqExtra }
+      });
+    }
+   
+    
+  },[data, reqExtra, reqIdentifier, isLoading, error]);
 
   useEffect(() => {
     console.log(userIngredients);
@@ -111,7 +96,7 @@ const Ingredients = (props) => {
   
   
   let closeError = useCallback(() => {
-    dispatchHttp({type: "RESET"})
+    //dispatchHttp({type: "RESET"})
   },[]);
 
   const ingredientList =  useMemo(() => {
@@ -127,7 +112,7 @@ const Ingredients = (props) => {
       <IngredientForm onSubmitForm={addIngredientHandler} loading={isLoading}/>
 
       <section>
-        <Search onLoadingIngredients={filterIngredientHandler} httpDispatcher={useCallback((args) => {dispatchHttp(args)},[])} />
+        <Search onLoadingIngredients={filterIngredientHandler}  />
         {/* Need to add list here! */}
 
         {ingredientList}
