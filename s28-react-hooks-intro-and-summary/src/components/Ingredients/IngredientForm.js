@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Card from "../UI/Card";
 import "./IngredientForm.css";
 import LoadingIndicator from "../UI/LoadingIndicator";
+import { AuthContext } from "../../context/auth-context";
 
 const IngredientForm = React.memo((props) => {
     const [inputState, setInputState] = useState({ title: "", amount: "" });
+    const authContext = useContext(AuthContext);
 
     const submitHandler = (event) => {
         event.preventDefault();
         props.onSubmitForm(inputState);
         
     };
+
+    const logoutHandler = (event) => {
+        event.preventDefault();
+        authContext.logout();
+    }
 
     console.log("RENDERING INGREDIENT FORM");
 
@@ -45,6 +52,7 @@ const IngredientForm = React.memo((props) => {
                         <button type="submit" disabled={props.loading}>                        
                           Add Ingredient
                         </button>
+                        <button onClick={logoutHandler}>Logout</button>
                         {props.loading && <LoadingIndicator /> }  
                     </div>
                 </form>

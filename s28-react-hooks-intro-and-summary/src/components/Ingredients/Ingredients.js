@@ -1,9 +1,10 @@
-import React, {useReducer, useEffect, useCallback} from 'react';
+import React, {useReducer, useEffect, useCallback, useMemo} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
+import useHttp from '../../hooks/https';
 
 const ingredientReducer = (currentIngredients, action) => {
   switch (action.type) {
@@ -19,74 +20,86 @@ const ingredientReducer = (currentIngredients, action) => {
 }
 
 const httpReducer = (curHttpState, action) => {
-  switch(action.type){
-    case "SEND":
-      return {loading: true, error : null}
-    case "RESPONSE":
-      return {loading: false, error : null}
-    case "ERROR":
-      return {...curHttpState, loading: false, error : action.errorMessage}
-    case "RESET":
-      return {loading: false, error : null}
-    default :
-      throw new Error("Something went wrong");
+  switch (action.type) {
+    case 'SEND':
+      return { loading: true, error: null };
+    case 'RESPONSE':
+      return { ...curHttpState, loading: false };
+    case 'ERROR':
+      return { loading: false, error: action.errorMessage };
+    case 'CLEAR':
+      return { ...curHttpState, error: null };
+    default:
+      throw new Error('Should not be reached!');
   }
-}
+};
+
+
 
 
 const Ingredients = (props) => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const [httpState, dispatchHttp] = useReducer(httpReducer, {loading: false, error : null})
+  const [httpState, dispatchHttp] = useReducer(httpReducer, {
+    loading : false,
+    error : null
+  })
+  const {
+    isLoading,
+    data,
+    error,
+    sendRequest
+  } = useHttp();
+
+  
   
 
   
 
   const addIngredientHandler = (ingredient) => {
-    dispatchHttp({type: "SEND"})
-    fetch('https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json', {
-      method : 'POST',
-      body : JSON.stringify(ingredient),
-      headers : { 'Content-Type' : 'application/json' }
-    })
-    .then(response => {
+    // dispatchHttp({type: "SEND"})
+    // fetch('https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json', {
+    //   method : 'POST',
+    //   body : JSON.stringify(ingredient),
+    //   headers : { 'Content-Type' : 'application/json' }
+    // })
+    // .then(response => {
       
-      dispatchHttp({type: "RESPONSE"})
-      return response.json();
-    })
-    .then(responseData => {
+    //   dispatchHttp({type: "RESPONSE"})
+    //   return response.json();
+    // })
+    // .then(responseData => {
       
-      dispatch({type : "ADD", ingredient : { id: responseData.name, ...ingredient }})
-    })
-    .catch((error) => {
-      dispatchHttp({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
-    })
+    //   dispatch({type : "ADD", ingredient : { id: responseData.name, ...ingredient }})
+    // })
+    // .catch((error) => {
+    //   dispatchHttp({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
+    // })
+
+    sendRequest(
+      'https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json',
+      'POST',
+      JSON.stringify(ingredient)
+    )
     
     
     
   }
 
   const onRemoveHandler = useCallback((id) => {
-    dispatchHttp({type: "SEND"})
-    fetch(`https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${id}/.json`, {
-      method : 'DELETE',      
-    })
-    .then((response) => {
-       
-      dispatchHttp({type: "RESPONSE"})
-      dispatch({ type : "DELETE", id : id})
-    })
-    .catch((error) => {
-      dispatchHttp({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
-    })
-    .finally()
+    
+    sendRequest(
+      `https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${id}/.json`,
+      'DELETE',
+      {}
+    )
 
     
     
-  },[]);
+  },[sendRequest]);
 
   useEffect(() => {
     console.log("RENDERING INGREDIENTS", userIngredients);
-  })
+  },[userIngredients]);
 
   useEffect(() => {
     console.log(userIngredients);
@@ -101,16 +114,24 @@ const Ingredients = (props) => {
     dispatchHttp({type: "RESET"})
   },[]);
 
+  const ingredientList =  useMemo(() => {
+    return (
+      <IngredientList ingredients={userIngredients} onRemoveItem={onRemoveHandler} />
+    );
+  }, [userIngredients, onRemoveHandler]);
+
 
   return (
     <div className="App">
-      {httpState.error && <ErrorModal onClose={closeError}> {httpState.error}</ErrorModal>}
-      <IngredientForm onSubmitForm={addIngredientHandler} loading={httpState.loading}/>
+      {error && <ErrorModal onClose={closeError}> {error}</ErrorModal>}
+      <IngredientForm onSubmitForm={addIngredientHandler} loading={isLoading}/>
 
       <section>
         <Search onLoadingIngredients={filterIngredientHandler} httpDispatcher={useCallback((args) => {dispatchHttp(args)},[])} />
         {/* Need to add list here! */}
-        <IngredientList ingredients={userIngredients} onRemoveItem={onRemoveHandler} />
+
+        {ingredientList}
+        
       </section>
     </div>
   );

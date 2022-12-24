@@ -12,7 +12,11 @@ const AuthContextProvider  = props => {
         setIsAuthenticated(true);
     }
 
-    return  <AuthContext.Provider value={{login: loginHandler, isAuth : isAuthenticated}}>
+    let logoutHandler = () => {
+        setIsAuthenticated(false);
+    }
+
+    return  <AuthContext.Provider value={{login: loginHandler, logout : logoutHandler, isAuth : isAuthenticated}}>
             {props.children}
         </AuthContext.Provider>
 }
