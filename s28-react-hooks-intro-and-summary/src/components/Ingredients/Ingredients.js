@@ -34,7 +34,8 @@ const Ingredients = (props) => {
     error,
     sendRequest,
     reqExtra,
-    reqIdentifier
+    reqIdentifier,
+    clear
   } = useHttp();
 
   
@@ -95,9 +96,7 @@ const Ingredients = (props) => {
   }, [])
   
   
-  let closeError = useCallback(() => {
-    //dispatchHttp({type: "RESET"})
-  },[]);
+  
 
   const ingredientList =  useMemo(() => {
     return (
@@ -108,7 +107,7 @@ const Ingredients = (props) => {
 
   return (
     <div className="App">
-      {error && <ErrorModal onClose={closeError}> {error}</ErrorModal>}
+      {error && <ErrorModal onClose={clear}> {error}</ErrorModal>}
       <IngredientForm onSubmitForm={addIngredientHandler} loading={isLoading}/>
 
       <section>

@@ -2,11 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 
 import Card from "../UI/Card";
 import "./Search.css";
+import useHttp from "../../hooks/https";
+import ErrorModal from "../UI/ErrorModal";
+import LoadingIndicator from "../UI/LoadingIndicator";
 
 const Search = React.memo((props) => {
     const { onLoadingIngredients } = props;
     const [enteredFilter, setEnteredFilter] = useState("");
     const inputRef = useRef();
+    const {
+        isLoading,
+        data,
+        error,
+        sendRequest,        
+        clear
+      } = useHttp();
 
     useEffect(() => {
         
@@ -17,42 +27,46 @@ const Search = React.memo((props) => {
                         ? ""
                         : `?orderBy="title"&equalTo="${enteredFilter}"`;
 
-                fetch(
-                    "https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json" +
-                        query
+                sendRequest(
+                    "https://react-hooks-update-udemy-ceedb-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json" + query,
+                    "GET"
+                   
                 )
-                    .then((response) => response.json())
-                    .then((responseData) => {
-                        const loadingIngredients = [];
-                        for (const key in responseData) {
-                            loadingIngredients.push({
-                                id: key,
-                                title: responseData[key].title,
-                                amount: responseData[key].amount,
-                            });
-                        }
-
-                        onLoadingIngredients(loadingIngredients);
-                    })
-                    .catch((error) => {
-                      //httpDispatcher({type: "ERROR", errorMessage : 'Something went wrong! ' + error.message})
-                    })
-                    .finally(() => {
-                        //httpDispatcher({type : "RESPONSE"});
-                    });
+                    
             }
+
         }, 500);
 
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [enteredFilter, onLoadingIngredients, inputRef]);
+    }, [sendRequest, enteredFilter]);
+
+    useEffect(() => {
+        if(!isLoading &&  !error &&  data){
+            const loadingIngredients = [];
+            for (const key in data) {
+                loadingIngredients.push({
+                    id: key,
+                    title: data[key].title,
+                    amount: data[key].amount,
+                });
+            }
+
+            onLoadingIngredients(loadingIngredients);
+        }
+
+    }, [data, isLoading, error, onLoadingIngredients])
 
     return (
         <section className="search">
+
+            {error && <ErrorModal onClose={clear}> {error}</ErrorModal>}
+
             <Card>
                 <div className="search-input">
                     <label>Filter by Title</label>
+                    {isLoading && <LoadingIndicator /> }  
                     <input
                         type="text"
                         ref={inputRef}

@@ -1,5 +1,13 @@
 import { useReducer, useCallback } from "react";
 
+const httpInitialState = {
+    loading: false, 
+    error : null,
+    data: null,
+    extra: null,
+    identifier: null
+};
+
 const httpReducer = (curHttpState, action) => {
     switch(action.type){
       case "SEND":
@@ -25,23 +33,16 @@ const httpReducer = (curHttpState, action) => {
             error : action.errorMessage
         }
       case "CLEAR":
-        return {
-            ...curHttpState,
-            error: null
-        }
+        return httpInitialState
       default :
         throw new Error("Something went wrong");
     }
   }
 
 const useHttp = () => {
-    const [httpState, dispatchHttp] = useReducer(httpReducer, {
-        loading: false, 
-        error : null,
-        data: null,
-        extra: null,
-        identifier: null
-    }) 
+    const [httpState, dispatchHttp] = useReducer(httpReducer, httpInitialState);
+
+    const clear = useCallback(() => dispatchHttp({type : "CLEAR"}), []);
 
     const sendRequest = useCallback(
         (url, method, body, reqExtra, reqIdentifier) => {
@@ -67,7 +68,7 @@ const useHttp = () => {
             .catch(error => {
                 dispatchHttp({
                     type : 'ERROR',
-                    errorMessage :  'Something Went Wrong!' + error
+                    errorMessage :  'Something Went Wrong! ' + error
                 });
             });
             
@@ -81,7 +82,8 @@ const useHttp = () => {
         error : httpState.error,
         sendRequest :  sendRequest,
         reqExtra : httpState.extra,
-        reqIdentifier : httpState.identifier       
+        reqIdentifier : httpState.identifier,
+        clear : clear       
     }
 };
 
