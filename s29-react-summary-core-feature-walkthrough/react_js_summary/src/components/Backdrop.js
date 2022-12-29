@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Backdrop = () => {
+const Backdrop = (props) => {
   return (
-    <div className="backdrop">Backdrop</div>
+    <div className="backdrop" onClick={props.onCancel} >Backdrop</div>
   )
 }
 
