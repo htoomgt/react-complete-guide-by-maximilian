@@ -18,6 +18,8 @@ const NewMeetupPage = () => {
       }).then(() => {
         navigate('/welcome', { replace : true})
       });
+
+      
   }
 
 
