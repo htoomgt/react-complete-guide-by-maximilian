@@ -16,10 +16,8 @@ const NewMeetupPage = () => {
           'Content-Type': 'application/json',          
         }
       }).then(() => {
-        navigate('/welcome', { replace : true})
+        navigate('/', { replace : true})
       });
-
-      
   }
 
 
